@@ -3,8 +3,9 @@ const c = document.getElementById('campo')
 var q_b_baixo, c_b_baixo, aux_des = 0, aux_sub = 0;
 var trava = false
 var posicao = 1;
-var gravidade = 15.81;
+var gravidade = 9.81;
 var libera = false;
+
 
 
 function inicio() {
