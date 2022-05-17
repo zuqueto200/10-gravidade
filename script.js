@@ -2,51 +2,63 @@ const q = document.getElementById('move')
 const c = document.getElementById('campo')
 var q_b_baixo, c_b_baixo, aux_des = 0, aux_sub = 0;
 var trava = false
-var posicao = 1;
-var gravidade = 9.81;
+var posicaoy = 1;
+var posicaox = 225;
+var gravidade =9.8;
 var libera = false;
 
 
-
+document.getElementById('rangeG').value = gravidade
 function inicio() {
 
-  c.onmouseup = function () { libera = false}
-  q.onmousedown = function () { libera = true ;}
-  c.onmousemove = function () {if (libera === true) {posicao = window.event.y-25; aux_des = 0}}
-  
-  q.style.top = posicao + 'px'
+  gravidade = document.getElementById('rangeG').value
+ document.getElementsByClassName("forcaG")[0].innerHTML = gravidade
 
 
 
-  if(libera === false){
+  c.onmouseup = function () { libera = false }
+  q.onmousedown = function () { libera = true; trava = true }
 
-  q_b_baixo = q.getBoundingClientRect().y + 50
-  c_b_baixo = c.getBoundingClientRect().y + 500
+  c.onmousemove = function () { if (libera === true) { posicaoy = window.event.y - 25; posicaox = window.event.x - 25; aux_des = 0 } }
 
-  if (posicao > 449) {
-    posicao = 449;
-    trava = true;
+  if (posicaox > 449) { posicaox = 449 }
+
+  q.style.top = posicaoy + 'px'
+  q.style.left = posicaox + 'px'
+
+
+
+  if (libera === false) {
+
+    q_b_baixo = q.getBoundingClientRect().y + 50
+    c_b_baixo = c.getBoundingClientRect().y + 500
+
+    if (posicaox > 449) { posicaox = 449 }
+    if (posicaoy > 449) {
+      posicaoy = 449;
+      trava = true;
+    }
+
+    //////////////
+
+    q.style.top = posicaoy + 'px'
+    q.style.left = posicaox + 'px'
+
+    if (aux_sub < 0) { aux_des = 0; trava = false }
+
+    // descida
+    if (trava === false) {
+      aux_des = aux_des + 0.01;
+      posicaoy = posicaoy + aux_des;
+      aux_sub = aux_des;
+    }
+    // subida
+    if (trava === true) {
+      aux_sub = aux_sub - (0.01 + ((gravidade) / 1000));
+      posicaoy = posicaoy - aux_sub;
+
+    }
   }
-
-  //////////////
-
-  q.style.top = posicao + 'px'
-  
-  if (aux_sub < 0) { aux_des = 0; trava = false }
-  
-  // descida
-  if (trava === false) {
-    aux_des = aux_des + 0.01;
-    posicao = posicao + aux_des;
-    aux_sub = aux_des;
-  }
-  // subida
-  if (trava === true) {
-    aux_sub = aux_sub - (0.01 + ((gravidade) / 1000));
-    posicao = posicao - aux_sub;
-    
-  }
-}
 }
 
 setInterval(inicio, 1)
